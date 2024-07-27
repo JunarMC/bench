@@ -130,8 +130,6 @@
 
     <div class="xp-bar">
         <div class="xp-button" onclick="openServerList()">Server List</div>
-        <div class="button" >‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ ‎‏‏‎ dsc.gg/jnmc</div>
-
         <div class="xp-close">X</div>
     </div>
 
@@ -156,8 +154,11 @@
         <iframe id="iframe" src="" frameborder="0"></iframe>
     </div>
 
+    <audio id="background-music" src="xp-music.mp3" loop></audio>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        // Initialize particles.js
         particlesJS('particles-js', {
             "particles": {
                 "number": {
@@ -245,9 +246,12 @@
             "retina_detect": true
         });
 
+        // Handle music playback and iframe interactions
+        const audio = document.getElementById('background-music');
+        const iframeContainer = document.getElementById('iframe-container');
+
         function launch() {
             const version = document.getElementById('version-select').value;
-            const iframeContainer = document.getElementById('iframe-container');
             const iframe = document.getElementById('iframe');
 
             switch (version) {
@@ -263,7 +267,7 @@
                 case 'dragonx':
                 case 'uwu':
                 case 'moonlight':
-                    alert("We don't endorse hacked clients, and show respect to Xbox Support's policy by disabling them across the site. If you want to abuse hacked clients, there is plenty of choices on Google, however, this website will not provide any hacked client links to maintain a hacked-client free Eaglercraft community, not that anyone uses this launcher anyway.");
+                    alert("We don't endorse hacked clients, and show respect to Xbox Support's policy by disabling them across the site.");
                     return;
                 case 'shadow':
                     iframe.src = 'https://peytonplayz595.github.io/Shadow-4.0/javascript/';
@@ -276,11 +280,13 @@
                     return;
             }
 
+            audio.pause();
             iframeContainer.style.display = 'block';
         }
 
         function closeIframe() {
-            document.getElementById('iframe-container').style.display = 'none';
+            iframeContainer.style.display = 'none';
+            audio.play();
         }
 
         function openServerList() {
@@ -320,7 +326,11 @@
             serverListContainer.appendChild(serverListIframe);
             document.body.appendChild(serverListContainer);
         }
+
+        // Play background music on page load
+        window.onload = () => {
+            audio.play();
+        };
     </script>
 </body>
 </html>
-
