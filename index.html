@@ -67,12 +67,14 @@
 
         iframe {
             width: 100%;
-            height: 60vh;
+            height: 100vh;
             border: none;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            border-radius: 0;
         }
 
         .packs {
@@ -80,6 +82,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
+            margin-bottom: 20px;
         }
 
         .card {
@@ -116,6 +119,56 @@
         .card a:hover {
             background: #0299a9;
         }
+
+        .server-list-btn {
+            display: inline-block;
+            margin: 20px;
+            padding: 10px 20px;
+            background: #ff5edf;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 1em;
+            transition: background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .server-list-btn:hover {
+            background: #e14e9a;
+        }
+
+        .iframe-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .iframe-overlay iframe {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+
+        .iframe-overlay .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +180,7 @@
             <select id="clientSelector" onchange="loadClient()">
                 <option value="">Select a Client</option>
                 <option value="https://minecraft-github-io.vercel.app/clients/1.8/Koneclient/index.html">Kone Client</option>
-                <option value="https://client.junarmc.xyz">Resent Client</option>
+                <option value="https://reslauncher4.vercel.app">Resent Client</option>
                 <option value="https://minecraft-github-io.vercel.app/clients/1.8/latest/index.html">Latest 1.8</option>
                 <option value="https://minecraft-github-io.vercel.app/clients/1.5.2/index.html">Latest 1.5.2</option>
                 <option value="https://minecraft-github-io.vercel.app/clients/1.8/shadow/index.html">Shadow Client 4.0</option>
@@ -137,12 +190,18 @@
         <div class="packs" id="packsContainer">
             <!-- Packs will be loaded here -->
         </div>
+        <a class="server-list-btn" onclick="openServerList()">Server List</a>
+        <div class="iframe-overlay" id="iframeOverlay">
+            <button class="close-btn" onclick="closeOverlay()">×</button>
+            <iframe src="" id="serverIframe"></iframe>
+        </div>
     </div>
     <script>
         function loadClient() {
             const clientSelector = document.getElementById('clientSelector');
             const clientFrame = document.getElementById('clientFrame');
             clientFrame.src = clientSelector.value;
+            clientFrame.style.display = 'block'; // Show the iframe
         }
 
         async function loadPacks() {
@@ -164,7 +223,21 @@
             });
         }
 
-        loadPacks();
+        function openServerList() {
+            const overlay = document.getElementById('iframeOverlay');
+            const iframe = document.getElementById('serverIframe');
+            iframe.src = 'https://servers.eaglercraft.com';
+            overlay.style.display = 'flex';
+        }
+
+        function closeOverlay() {
+            const overlay = document.getElementById('iframeOverlay');
+            overlay.style.display = 'none';
+        }
+
+        window.onload = () => {
+            loadPacks();
+        };
     </script>
 </body>
 </html>
