@@ -3,241 +3,372 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EaglerCraft Launcher</title>
+    <title>HoisLauncher</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
-        body, html {
+        * {
             margin: 0;
             padding: 0;
-            min-height: 100%;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            background: linear-gradient(270deg, #ff5edf, #04c8de, #ffc600, #ffa947);
-            background-size: 600% 600%;
-            animation: gradient 15s ease infinite;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a1a1a;
             color: #fff;
+            min-height: 100vh;
         }
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            padding: 20px;
-            text-align: center;
-        }
-
-        header {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin: 0;
-        }
-
-        .selector-container {
-            margin-bottom: 20px;
-        }
-
-        select {
-            padding: 10px;
-            font-size: 1em;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #fff;
-            border-radius: 5px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-        }
-
-        select option {
-            background: #333;
-            color: #fff;
-        }
-
-        iframe {
-            width: 100%;
+        .launcher {
+            display: flex;
             height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #0f0f0f;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #333;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo h1 {
+            font-size: 1.5em;
+            color: #4CAF50;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-tab {
+            padding: 15px;
+            background-color: #1a1a1a;
             border: none;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-tab.active {
+            background-color: #4CAF50;
+        }
+
+        .nav-tab:hover:not(.active) {
+            background-color: #333;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .tab-content {
             display: none;
-            position: fixed;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .client-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .client-card {
+            background-color: #242424;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .client-card::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
-            z-index: 1000;
-            border-radius: 0;
-        }
-
-        .packs {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 20px;
-            width: 200px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .card img {
             width: 100%;
+            height: 4px;
+            background: #4CAF50;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .client-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .client-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .client-card h3 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .client-card p {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .launch-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        .card h2 {
-            font-size: 1.2em;
-            margin: 10px 0;
+        .launch-btn:hover {
+            background-color: #45a049;
         }
 
-        .card a {
+        .texture-pack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .texture-pack-card {
+            background-color: #242424;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .texture-pack-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .texture-pack-img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .texture-pack-info {
+            padding: 15px;
+        }
+
+        .texture-pack-info h3 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .download-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
             display: inline-block;
             margin-top: 10px;
-            padding: 10px 20px;
-            background: #04c8de;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #fff;
-            transition: background 0.3s ease;
         }
 
-        .card a:hover {
-            background: #0299a9;
+        .download-btn:hover {
+            background-color: #45a049;
         }
 
-        .server-list-btn {
-            display: inline-block;
-            margin: 20px;
-            padding: 10px 20px;
-            background: #ff5edf;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #fff;
-            font-size: 1em;
-            transition: background 0.3s ease;
-            cursor: pointer;
-        }
-
-        .server-list-btn:hover {
-            background: #e14e9a;
-        }
-
-        .iframe-overlay {
+        .game-frame {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
             display: none;
+            z-index: 1000;
         }
 
-        .iframe-overlay iframe {
+        .game-frame iframe {
             width: 100%;
             height: 100%;
-            border-radius: 0;
+            border: none;
         }
 
-        .iframe-overlay .close-btn {
+        .close-game {
             position: absolute;
             top: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.1);
+            background: #4CAF50;
             border: none;
-            color: #fff;
-            font-size: 1.5em;
-            cursor: pointer;
+            color: white;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            padding: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 1001;
+        }
+
+        .close-game:hover {
+            background: #45a049;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>EaglerCraft Launcher</h1>
-        </header>
-        <div class="selector-container">
-            <select id="clientSelector" onchange="loadClient()">
-                <option value="">Select a Client</option>
-                <option value="https://minecraft-github-io.vercel.app/clients/1.8/Koneclient/index.html">Kone Client</option>
-                <option value="https://client.junarmc.xyz">Resent Client</option>
-                <option value="https://minecraft-github-io.vercel.app/clients/1.8/latest/index.html">Latest 1.8</option>
-                <option value="https://minecraft-github-io.vercel.app/clients/1.5.2/index.html">Latest 1.5.2</option>
-                <option value="https://minecraft-github-io.vercel.app/clients/1.8/shadow/index.html">Shadow Client 4.0</option>
-            </select>
+    <div class="launcher">
+        <div class="sidebar">
+            <div class="logo">
+                <h1>HoisLauncher</h1>
+            </div>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="clients">
+                    <span>📱</span> Clients
+                </button>
+                <button class="nav-tab" data-tab="textures">
+                    <span>🎨</span> Texture Packs
+                </button>
+  <button class="nav-button" onclick="window.open('https://notjunar.is-a.dev', '_blank')">
+    <span>Notjunar's Bio</span>
+  </button>
+<p>This website does not endorse nor have any connection with any of these clients, all clients belongs to their rightful owner. This website does not host any of the client files.
+</nav>
+
+
+
+            </div>
         </div>
-        <iframe id="clientFrame" src=""></iframe>
-        <div class="packs" id="packsContainer">
-            <!-- Packs will be loaded here -->
-        </div>
-        <a class="server-list-btn" onclick="openServerList()">Server List</a>
-        <div class="iframe-overlay" id="iframeOverlay">
-            <button class="close-btn" onclick="closeOverlay()">×</button>
-            <iframe src="" id="serverIframe"></iframe>
+
+        <div class="main-content">
+            <div class="tab-content active" id="clients">
+                <div class="client-grid">
+                    <div class="client-card">
+                        <h3>Kone Client</h3>
+                        <p>Enhanced performance and custom features</p>
+                        <button class="launch-btn" data-client="https://minecraft-github-io.vercel.app/clients/1.8/Koneclient/index.html">Launch</button>
+                    </div>
+                    <div class="client-card">
+                        <h3>Resent Client</h3>
+                        <p>Popular choice with modern features</p>
+                        <button class="launch-btn" data-client="https://client.junarmc.xyz">Launch</button>
+                    </div>
+                    <div class="client-card">
+                        <h3>Latest 1.8</h3>
+                        <p>Standard 1.8 version with updates</p>
+                        <button class="launch-btn" data-client="https://minecraft-github-io.vercel.app/clients/1.8/latest/index.html">Launch</button>
+                    </div>
+                    <div class="client-card">
+                        <h3>Latest 1.5.2</h3>
+                        <p>Classic version for nostalgic gameplay</p>
+                        <button class="launch-btn" data-client="https://minecraft-github-io.vercel.app/clients/1.5.2/index.html">Launch</button>
+                    </div>
+                    <div class="client-card">
+                        <h3>Shadow Client 4.0</h3>
+                        <p>Feature-rich client with customization</p>
+                        <button class="launch-btn" data-client="https://minecraft-github-io.vercel.app/clients/1.8/shadow/index.html">Launch</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="textures">
+                <div class="texture-pack-grid" id="texturePackGrid">
+                </div>
+            </div>
         </div>
     </div>
+
+    <div class="game-frame" id="gameFrame">
+        <button class="close-game" onclick="closeGame()">×</button>
+        <iframe id="gameIframe" src=""></iframe>
+    </div>
+
     <script>
-        function loadClient() {
-            const clientSelector = document.getElementById('clientSelector');
-            const clientFrame = document.getElementById('clientFrame');
-            clientFrame.src = clientSelector.value;
-            clientFrame.style.display = 'block'; // Show the iframe
-        }
-
-        async function loadPacks() {
-            const response = await fetch('https://minecraft-github-io.vercel.app/packs.html');
-            const text = await response.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(text, 'text/html');
-            const packsContainer = document.getElementById('packsContainer');
-            const packCards = doc.querySelectorAll('.cards__card.card');
-
-            packCards.forEach(card => {
-                const img = card.querySelector('img');
-                img.src = `https://minecraft-github-io.vercel.app${img.getAttribute('src')}`;
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 
-                const downloadLink = card.querySelector('a');
-                downloadLink.href = `https://minecraft-github-io.vercel.app${downloadLink.getAttribute('href')}`;
-                
-                packsContainer.appendChild(card);
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
             });
+        });
+
+        document.querySelectorAll('.launch-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const gameFrame = document.getElementById('gameFrame');
+                const gameIframe = document.getElementById('gameIframe');
+                gameIframe.src = btn.dataset.client;
+                gameFrame.style.display = 'block';
+            });
+        });
+
+        function closeGame() {
+            const gameFrame = document.getElementById('gameFrame');
+            const gameIframe = document.getElementById('gameIframe');
+            gameFrame.style.display = 'none';
+            gameIframe.src = '';
         }
 
-        function openServerList() {
-            const overlay = document.getElementById('iframeOverlay');
-            const iframe = document.getElementById('serverIframe');
-            iframe.src = 'https://servers.eaglercraft.com';
-            overlay.style.display = 'flex';
+        async function loadTexturePacks() {
+            try {
+                const response = await fetch('https://minecraft-github-io.vercel.app/packs.html');
+                const text = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const texturePackGrid = document.getElementById('texturePackGrid');
+
+                doc.querySelectorAll('.cards__card.card').forEach(card => {
+                    const img = card.querySelector('img');
+                    const title = card.querySelector('h2').textContent;
+                    const downloadLink = card.querySelector('a').getAttribute('href');
+
+                    const packCard = document.createElement('div');
+                    packCard.className = 'texture-pack-card';
+                    packCard.innerHTML = `
+                        <img class="texture-pack-img" src="https://minecraft-github-io.vercel.app${img.getAttribute('src')}" alt="${title}">
+                        <div class="texture-pack-info">
+                            <h3>${title}</h3>
+                            <a href="https://minecraft-github-io.vercel.app${downloadLink}" class="download-btn">Download</a>
+                        </div>
+                    `;
+
+                    texturePackGrid.appendChild(packCard);
+                });
+            } catch (error) {
+                console.error('Error loading texture packs:', error);
+            }
         }
 
-        function closeOverlay() {
-            const overlay = document.getElementById('iframeOverlay');
-            overlay.style.display = 'none';
-        }
-
-        window.onload = () => {
-            loadPacks();
-        };
+        window.onload = loadTexturePacks;
     </script>
 </body>
 </html>
