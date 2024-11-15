@@ -314,7 +314,7 @@
             </div>
             
             <div class="disclaimer">
-                This website does not endorse nor have any connection with any of these clients. All clients belong to their rightful owners. This website does not promote piracy.
+                This website does not endorse nor have any connection with any of these clients. All clients belong to their rightful owners.
             </div>
 
             <div class="theme-switcher">
@@ -382,8 +382,7 @@
                     <iframe src="https://servers.eaglercraft.com"></iframe>
                 </div>
                 <div class="server-list-disclaimer">
-                    Eagler Server list is maintained by ArchMC. Which is not affiliated with this site.
-                    If anyone at ESL want this iframe down. Please contact @notjunar#0 on Discord.
+                    Server list maintained by ArchMC. Not affiliated with this site.
                 </div>
             </div>
         </div>
@@ -393,3 +392,95 @@
         <button class="close-game" onclick="closeGame()">×</button>
         <iframe id="gameIframe" src=""></iframe>
     </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none';
+        }, 1500);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const isInIframe = window.self !== window.top;
+        const isAboutBlank = window.location.href.includes('about:blank');
+
+        if (!isInIframe && !isAboutBlank) {
+            const win = window.open('about:blank', '_blank');
+            if (win) {
+                win.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>About:Blank</title>
+                    </head>
+                    <body style="margin:0;padding:0;overflow:hidden;">
+                        <iframe src="${window.location.href}" style="border:none;width:100vw;height:100vh;"></iframe>
+                    </body>
+                    </html>
+                `);
+                window.location.href = 'https://www.google.com';
+            }
+        }
+
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                if (!tabId) return;
+
+                navTabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        const launchButtons = document.querySelectorAll('.launch-btn');
+        launchButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const clientUrl = btn.getAttribute('data-client');
+                const gameFrame = document.getElementById('gameFrame');
+                const gameIframe = document.getElementById('gameIframe');
+                gameIframe.src = clientUrl;
+                gameFrame.style.display = 'block';
+            });
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                closeGame();
+            }
+        });
+    });
+
+    function closeGame() {
+        const gameFrame = document.getElementById('gameFrame');
+        const gameIframe = document.getElementById('gameIframe');
+        gameFrame.style.display = 'none';
+        gameIframe.src = '';
+    }
+
+    function setTheme(theme) {
+        document.body.className = theme === 'default' ? '' : `theme-${theme}`;
+        localStorage.setItem('theme', theme);
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(function(err) {
+            console.error('ServiceWorker registration failed:', err);
+        });
+    }
+
+    window.addEventListener('beforeunload', function(e) {
+        if (!window.location.href.includes('about:blank')) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+</script>
